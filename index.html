@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RapidRoute Intro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,500;1,600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+    overflow:hidden;
+    background: linear-gradient(135deg, #3a5bff, #6a5cff, #2ec4ff);
+}
+
+.container{
+    text-align:center;
+}
+
+.logo{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:20px;
+    background: rgba(255,255,255,0.08);
+    padding:10px;
+    box-shadow:
+        0 0 10px rgba(255,255,255,0.3),
+        0 0 20px rgba(58,91,255,0.5),
+        0 0 40px rgba(46,196,255,0.6),
+        0 0 60px rgba(58,91,255,0.8);
+    animation:logoShow 1s ease forwards;
+}
+
+h1{
+    font-size:42px;
+    letter-spacing:2px;
+    margin:0;
+    font-style:italic;
+    font-weight:600;
+    text-align:center;
+}
+
+.line {
+    display:block;
+}
+
+.letter{
+    opacity:0;
+    display:inline-block;
+    animation:fadeLetter 0.3s forwards;
+}
+
+.slogan{
+    margin-top:15px;
+    font-size:18px;
+    opacity:0;
+    animation:showSlogan 1s ease forwards;
+    font-style:italic;
+}
+
+@keyframes logoShow{
+    from{opacity:0; transform:scale(0.5);}
+    to{opacity:1; transform:scale(1);}
+}
+
+@keyframes fadeLetter{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes showSlogan{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@media (max-width: 480px) {
+    h1 { font-size:32px; }
+    .logo{ width:120px; height:120px; }
+}
+</style>
+</head>
+<body>
+
+<audio id="bgSound" src="intro.mp3"></audio>
+
+<div class="container">
+    <img src="rapidroutelogo.png" class="logo" alt="Logo">
+    <h1 id="text"></h1>
+    <p class="slogan">Anywhere Anytime</p>
+</div>
+
+<script>
+const lines = ["Welcome to", "RapidRoute"];
+const textContainer = document.getElementById("text");
+const slogan = document.querySelector(".slogan");
+
+let totalDelay = 0;
+
+// Animate each letter per line
+lines.forEach((lineText, lineIndex) => {
+    const lineSpan = document.createElement("span");
+    lineSpan.className = "line";
+
+    lineText.split("").forEach((char, index) => {
+        let span = document.createElement("span");
+        span.innerHTML = (char === " ") ? "&nbsp;" : char;
+        span.className = "letter";
+        let delay = 1 + (index + lineIndex*lineText.length) * 0.1;
+        span.style.animationDelay = delay + "s";
+        lineSpan.appendChild(span);
+        totalDelay = delay; // track last letter delay
+    });
+
+    textContainer.appendChild(lineSpan);
+});
+
+// Slogan appears after last letter + fade duration
+slogan.style.animationDelay = (totalDelay + 0.3) + "s";
+
+// Play background sound
+window.onload = function(){
+    const sound = document.getElementById("bgSound");
+    sound.play().catch(()=>{}); 
+
+    // Calculate total intro duration: last letter delay + letter animation + slogan animation
+    const introDuration = (totalDelay + 0.3 + 1) * 1000; // in ms
+    setTimeout(() => {
+        window.location.href = "newhome (1).html"; // redirect automatically
+    }, introDuration);
+};
+</script>
+
+</body>
+</html>
